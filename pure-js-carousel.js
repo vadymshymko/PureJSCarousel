@@ -15,7 +15,7 @@ var PureJSCarousel = function(config) {
   scope.carouselBtnPrev    = scope.carousel.querySelector(config.btnPrev) || false;
   scope.slidesToShow       = Math.round(scope.carousel.offsetWidth / scope.carouselSlides[0].offsetWidth);
   scope.oneByOne           = config.oneByOne || false;
-  scope.speed              = scope.carousel.style.transition !== 'undefined' ? config.speed || 1000 : 0;
+  scope.speed              = config.speed || 1000;
   scope.delay              = config.delay || 0;
   scope.effect             = config.effect || 'linear';
   scope.autoplay           = config.autoplay || false;
@@ -214,17 +214,25 @@ var PureJSCarousel = function(config) {
         } else {
           addTransition();
           scope.carouselList.style.marginLeft = scope.startTouchMargin + 'px';
-          setTimeout(function() {
+          if (scope.carousel.style.transition === 'undefined') {
             removeTransition();
-          }, scope.speed + scope.delay);
+          } else {
+            setTimeout(function() {
+              removeTransition();
+            }, scope.speed + scope.delay);
+          }
         }
       }
     } else {
       addTransition();
       scope.carouselList.style.marginLeft = scope.startTouchMargin + 'px';
-      setTimeout(function() {
+      if (scope.carousel.style.transition === 'undefined') {
         removeTransition();
-      }, scope.speed + scope.delay);
+      } else {
+        setTimeout(function() {
+          removeTransition();
+        }, scope.speed + scope.delay);
+      }
     }
   }
 
@@ -281,10 +289,15 @@ var PureJSCarousel = function(config) {
     scope.disableControl();
     addTransition();
     scope.carouselList.style.marginLeft = newMargin + 'px';
-    setTimeout(function() {
+    if (scope.carousel.style.transition === 'undefined') {
       setNewActiveIndex(index);
       scrollEnd(direction, scrollSlidesCount);
-    }, scope.speed + scope.delay);
+    } else {
+      setTimeout(function() {
+        setNewActiveIndex(index);
+        scrollEnd(direction, scrollSlidesCount);
+      }, scope.speed + scope.delay);
+    }
   }
 
   function autoplayScroll() {
