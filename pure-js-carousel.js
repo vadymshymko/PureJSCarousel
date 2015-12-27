@@ -24,6 +24,7 @@ var PureJSCarousel = function(config) {
   scope.autoplayDirection  = config.autoplayDirection || 'next';
   scope.infinite           = config.infinite || false;
   scope.carouselDots       = [];
+  scope.carouselDotBtns    = [];
   scope.activeIndex        = 0;
 
   scope.build = function() {
@@ -82,6 +83,7 @@ var PureJSCarousel = function(config) {
       dotBtn.className = 'pure-js-carousel-dot-btn';
       dotBtn.setAttribute('data-index', i);
       carouselDotBtnClick(scope, dotBtn);
+      scope.carouselDotBtns.push(dotBtn);
 
       dot.appendChild(dotBtn);
     }
@@ -174,8 +176,8 @@ var PureJSCarousel = function(config) {
     var i;
     scope.carouselBtnNext.disabled = true;
     scope.carouselBtnPrev.disabled = true;
-    for (i = 0; i < scope.carouselDots.length; i++) {
-      scope.carouselDots[i].disabled = true;
+    for (i = 0; i < scope.carouselDotBtns.length; i++) {
+      scope.carouselDotBtns[i].disabled = true;
     }
   };
 
@@ -183,8 +185,8 @@ var PureJSCarousel = function(config) {
     var i;
     scope.carouselBtnNext.disabled = false;
     scope.carouselBtnPrev.disabled = false;
-    for (i = 0; i < scope.carouselDots.length; i++) {
-      scope.carouselDots[i].disabled = false;
+    for (i = 0; i < scope.carouselDotBtns.length; i++) {
+      scope.carouselDotBtns[i].disabled = false;
     }
   };
 
