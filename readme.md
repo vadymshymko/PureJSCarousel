@@ -59,3 +59,7 @@ Go to slide: yourVariable.goTo(slideIndex);
 Disable carousel control: yourVariable.disableControl();
 
 Enable carousel control: yourVariable.enableControl();
+
+Destroy: yourVariable.destroy();
+
+Rebuild after destroy: yourVariable.rebuild();
