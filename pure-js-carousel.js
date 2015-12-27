@@ -1,13 +1,14 @@
 /*
- * Pure JavaScript carousel v 1.1
+ * Pure JavaScript carousel v 1.0
  * Author: Vadym Shymko
  * Author URI: http://ninjadev.pw/
  */
 
 var PureJSCarousel = function(config) {
-  var scope               = this;
-      scope.config        = config;
-      scope.carouselState = 0;
+  var scope                     = this;
+      scope.config              = config;
+      scope.carouselState       = 0;
+      scope.autoplayScrollState = 0;
 
   scope.build = function() {
     if (scope.carouselState === 0) {
@@ -122,6 +123,9 @@ var PureJSCarousel = function(config) {
       }
 
       scope.carouselState = 1;
+      if (scope.autoplay === true) {
+        scope.startAutoplay(scope.autoplayDirection);
+      }
     }
   };
 
@@ -130,6 +134,7 @@ var PureJSCarousel = function(config) {
       var i;
       scope.carousel.className = scope.carousel.className.replace(' pure-js-carousel', '');
       scope.carousel.removeChild(scope.carouselDotsList);
+
       if (scope.config.btnNext) {
         scope.carouselBtnNext.className = scope.carouselBtnNext.className.replace(' pure-js-carousel-btn pure-js-carousel-btn-next', '');
       } else {
@@ -140,6 +145,7 @@ var PureJSCarousel = function(config) {
       } else {
         scope.carousel.removeChild(scope.carouselBtnPrev);
       }
+
       if (scope.infinite === true) {
         for (i = 0; i < scope.carouselSlides.length; i++) {
           scope.carouselList.removeChild(scope.carouselList.querySelector('.pure-js-carousel-slide')[0]);
@@ -152,8 +158,11 @@ var PureJSCarousel = function(config) {
         scope.carouselSlides[i].className = scope.carouselSlides[i].className.replace(' pure-js-carousel-slide', '');
         scope.carousel.insertBefore(scope.carouselSlides[i], scope.carouselList);
       }
+
       scope.carousel.removeChild(scope.carouselList);
       setNewActiveIndex(0);
+      clearInterval(scope.autoplayInterval);
+      scope.autoplayScrollState = 0;
 
       scope.carouselState = 0;
     }
@@ -207,6 +216,20 @@ var PureJSCarousel = function(config) {
     }
   };
 
+  scope.startAutoplay = function(direction) {
+    if (scope.autoplayScrollState === 0) {
+      scope.autoplayScrollState = 1;
+      scope.autoplayInterval = setInterval(function() {
+        direction === 'next' ? scope.goToNext() : scope.goToPrev();
+      }, scope.autoplayDelay);
+    }
+  };
+
+  scope.stopAutoplay = function() {
+    scope.autoplayScrollState = 0;
+    clearInterval(scope.autoplayInterval);
+  };
+
   scope.disableControl = function() {
     var i;
     scope.carouselBtnNext.disabled = true;
@@ -243,9 +266,6 @@ var PureJSCarousel = function(config) {
   };
 
   scope.build();
-  if (scope.autoplay === true) {
-    autoplayScroll();
-  }
 
   function carouselListTouchStart(event) {
     scope.startTouchX = event.targetTouches[0].pageX;
@@ -355,12 +375,6 @@ var PureJSCarousel = function(config) {
       }, scope.speed + scope.delay);
     }
   }
-
-  function autoplayScroll() {
-    setInterval(function() {
-      scope.autoplayDirection === 'next' ? scope.goToNext() : scope.goToPrev();
-    }, scope.autoplayDelay);
-  };
 
   function scrollEnd(direction, scrollSlidesCount) {
     removeTransition();
