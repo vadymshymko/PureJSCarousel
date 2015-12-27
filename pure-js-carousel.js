@@ -1,126 +1,161 @@
 /*
- * Pure JavaScript carousel v 1.0
+ * Pure JavaScript carousel v 1.1
  * Author: Vadym Shymko
  * Author URI: http://ninjadev.pw/
  */
 
 var PureJSCarousel = function(config) {
-  var scope = this;
-
-  scope.carousel           = document.querySelector(config.carousel);
-  scope.carouselList       = document.createElement('div');
-  scope.carouselSlides     = scope.carousel.querySelectorAll(config.slide);
-  scope.carouselDotsList   = document.createElement('ul');
-  scope.carouselBtnNext    = scope.carousel.querySelector(config.btnNext) || false;
-  scope.carouselBtnPrev    = scope.carousel.querySelector(config.btnPrev) || false;
-  scope.slidesToShow       = Math.round(scope.carousel.offsetWidth / scope.carouselSlides[0].offsetWidth);
-  scope.oneByOne           = config.oneByOne || false;
-  scope.speed              = config.speed || 1000;
-  scope.delay              = config.delay || 0;
-  scope.effect             = config.effect || 'linear';
-  scope.autoplay           = config.autoplay || false;
-  scope.autoplayDelay      = config.autoplayDelay || 1000;
-  scope.autoplayStartDelay = config.autoplayStartDelay || scope.autoplayDelay;
-  scope.autoplayDirection  = config.autoplayDirection || 'next';
-  scope.infinite           = config.infinite || false;
-  scope.carouselDots       = [];
-  scope.carouselDotBtns    = [];
-  scope.activeIndex        = 0;
+  var scope               = this;
+      scope.config        = config;
+      scope.carouselState = 0;
 
   scope.build = function() {
-    var slidesCount = scope.carouselSlides.length,
-        dotsCount,
-        i;
+    if (scope.carouselState === 0) {
+      scope.carousel           = document.querySelector(scope.config.carousel);
+      scope.carouselList       = document.createElement('div');
+      scope.carouselSlides     = scope.carousel.querySelectorAll(scope.config.slide);
+      scope.carouselDotsList   = document.createElement('ul');
+      scope.carouselBtnNext    = scope.carousel.querySelector(scope.config.btnNext) || false;
+      scope.carouselBtnPrev    = scope.carousel.querySelector(scope.config.btnPrev) || false;
+      scope.slidesToShow       = Math.round(scope.carousel.offsetWidth / scope.carouselSlides[0].offsetWidth);
+      scope.oneByOne           = scope.config.oneByOne || false;
+      scope.speed              = scope.config.speed || 1000;
+      scope.delay              = scope.config.delay || 0;
+      scope.effect             = scope.config.effect || 'linear';
+      scope.autoplay           = scope.config.autoplay || false;
+      scope.autoplayDelay      = scope.config.autoplayDelay || 1000;
+      scope.autoplayStartDelay = scope.config.autoplayStartDelay || scope.autoplayDelay;
+      scope.autoplayDirection  = scope.config.autoplayDirection || 'next';
+      scope.infinite           = scope.config.infinite || false;
+      scope.carouselDots       = [];
+      scope.carouselDotBtns    = [];
+      scope.activeIndex        = 0;
 
-    scope.carousel.className += ' pure-js-carousel';
-    scope.carousel.style.width = (scope.carouselSlides[0].offsetWidth * scope.slidesToShow) + 'px';
-    scope.carousel.insertBefore(scope.carouselList, scope.carouselSlides[0]);
+      var slidesCount = scope.carouselSlides.length,
+          dotsCount,
+          i;
 
-    scope.carouselList.className = 'pure-js-carousel-list';
-    if (scope.infinite === true) {
-      scope.carouselList.style.marginLeft = - (scope.carouselSlides[0].offsetWidth * slidesCount) + 'px';
-      scope.carouselList.style.width = (scope.carouselSlides[0].offsetWidth * slidesCount * 3) + 'px';
-    } else if (scope.infinite === false) {
-      scope.carouselList.style.marginLeft = '0px';
-      scope.carouselList.style.width = (scope.carouselSlides[0].offsetWidth * slidesCount) + 'px';
-    }
-    scope.carouselList.addEventListener('touchstart', function(event) {
-      scope.startTouchX = event.targetTouches[0].pageX;
-      carouselListTouchStart();
-    });
-    scope.carouselList.addEventListener('touchmove', function(event) {
-      scope.activeTouchX = event.targetTouches[0].pageX;
-      carouselListTouchMove();
-    });
-    scope.carouselList.addEventListener('touchend', function(event) {
-      carouselListTouchEnd();
-    });
+      scope.carousel.className += ' pure-js-carousel';
+      scope.carousel.style.width = (scope.carouselSlides[0].offsetWidth * scope.slidesToShow) + 'px';
+      scope.carousel.insertBefore(scope.carouselList, scope.carouselSlides[0]);
 
-    scope.carousel.insertBefore(scope.carouselDotsList, scope.carouselSlides[0]);
-    scope.carouselDotsList.className = 'pure-js-carousel-dots';
-    if (scope.oneByOne === true) {
+      scope.carouselList.className = 'pure-js-carousel-list';
       if (scope.infinite === true) {
-        dotsCount = slidesCount;
+        scope.carouselList.style.marginLeft = - (scope.carouselSlides[0].offsetWidth * slidesCount) + 'px';
+        scope.carouselList.style.width = (scope.carouselSlides[0].offsetWidth * slidesCount * 3) + 'px';
       } else if (scope.infinite === false) {
-        dotsCount = ((scope.carouselList.offsetWidth - scope.carousel.offsetWidth) / scope.carouselSlides[0].offsetWidth) + 1;
+        scope.carouselList.style.marginLeft = '0px';
+        scope.carouselList.style.width = (scope.carouselSlides[0].offsetWidth * slidesCount) + 'px';
       }
-    } else {
+      scope.carouselList.addEventListener('touchstart', carouselListTouchStart);
+      scope.carouselList.addEventListener('touchmove', carouselListTouchMove);
+      scope.carouselList.addEventListener('touchend', carouselListTouchEnd);
+
+      scope.carousel.insertBefore(scope.carouselDotsList, scope.carouselSlides[0]);
+      scope.carouselDotsList.className = 'pure-js-carousel-dots';
+      if (scope.oneByOne === true) {
+        if (scope.infinite === true) {
+          dotsCount = slidesCount;
+        } else if (scope.infinite === false) {
+          dotsCount = ((scope.carouselList.offsetWidth - scope.carousel.offsetWidth) / scope.carouselSlides[0].offsetWidth) + 1;
+        }
+      } else {
+        if (scope.infinite === true) {
+          dotsCount = Math.ceil(scope.carouselList.offsetWidth / scope.carousel.offsetWidth / 3);
+        } else if (scope.infinite === false) {
+          dotsCount = Math.ceil(scope.carouselList.offsetWidth / scope.carousel.offsetWidth);
+        }
+      }
+      scope.maxIndex = dotsCount - 1;
+      for (var i = 0; i < dotsCount; i++) {
+        var dot    = document.createElement('li'),
+            dotBtn = document.createElement('button');
+
+        scope.carouselDotsList.appendChild(dot);
+        scope.carouselDots.push(dot);
+        dot.className = 'pure-js-carousel-dot' + (i === 0 ? ' active' : '');
+
+        dotBtn.className = 'pure-js-carousel-dot-btn';
+        dotBtn.setAttribute('data-index', i);
+        carouselDotBtnClick(scope, dotBtn);
+        scope.carouselDotBtns.push(dotBtn);
+
+        dot.appendChild(dotBtn);
+      }
+
+      if (scope.carouselBtnPrev === false) {
+        scope.carouselBtnPrev = document.createElement('button');
+        scope.carousel.appendChild(scope.carouselBtnPrev);
+      }
+      scope.carouselBtnPrev.className += ' pure-js-carousel-btn pure-js-carousel-btn-prev';
+      scope.carouselBtnPrev.type = 'button';
+      scope.carouselBtnPrev.addEventListener('click', function() {
+        scope.goToPrev();
+      });
+      if (scope.infinite === false) {
+        scope.carouselBtnPrev.disabled = true;
+      }
+
+      if (scope.carouselBtnNext === false) {
+        scope.carouselBtnNext = document.createElement('button');
+        scope.carousel.appendChild(scope.carouselBtnNext);
+      }
+      scope.carouselBtnNext.className += ' pure-js-carousel-btn pure-js-carousel-btn-next';
+      scope.carouselBtnNext.type = 'button';
+      scope.carouselBtnNext.addEventListener('click', function() {
+        scope.goToNext();
+      });
+
+      for (i = 0; i < slidesCount; i++) {
+        scope.carouselSlides[i].className += ' pure-js-carousel-slide';
+        scope.carouselList.appendChild(scope.carouselSlides[i]);
+      }
+
       if (scope.infinite === true) {
-        dotsCount = Math.ceil(scope.carouselList.offsetWidth / scope.carousel.offsetWidth / 3);
-      } else if (scope.infinite === false) {
-        dotsCount = Math.ceil(scope.carouselList.offsetWidth / scope.carousel.offsetWidth);
+        scope.carouselBtnPrev.disabled = true;
+        for (i = 0; i < slidesCount; i++) {
+          scope.carouselList.appendChild(scope.carouselSlides[i].cloneNode(true));
+        }
+        for (i = 0; i < slidesCount; i++) {
+          scope.carouselList.insertBefore(scope.carouselSlides[i].cloneNode(true), scope.carouselList.querySelector('.pure-js-carousel-slide')[i]);
+        }
       }
+
+      scope.carouselState = 1;
     }
-    scope.maxIndex = dotsCount - 1;
-    for (var i = 0; i < dotsCount; i++) {
-      var dot    = document.createElement('li'),
-          dotBtn = document.createElement('button');
+  };
 
-      scope.carouselDotsList.appendChild(dot);
-      scope.carouselDots.push(dot);
-      dot.className = 'pure-js-carousel-dot' + (i === 0 ? ' active' : '');
-
-      dotBtn.className = 'pure-js-carousel-dot-btn';
-      dotBtn.setAttribute('data-index', i);
-      carouselDotBtnClick(scope, dotBtn);
-      scope.carouselDotBtns.push(dotBtn);
-
-      dot.appendChild(dotBtn);
-    }
-
-    if (scope.carouselBtnPrev === false) {
-      scope.carouselBtnPrev = document.createElement('button');
-      scope.carousel.appendChild(scope.carouselBtnPrev);
-    }
-    scope.carouselBtnPrev.className += ' pure-js-carousel-btn pure-js-carousel-btn-prev';
-    scope.carouselBtnPrev.type = 'button';
-    scope.carouselBtnPrev.addEventListener('click', function() {
-      scope.goToPrev();
-    });
-
-    if (scope.carouselBtnNext === false) {
-      scope.carouselBtnNext = document.createElement('button');
-      scope.carousel.appendChild(scope.carouselBtnNext);
-    }
-    scope.carouselBtnNext.className += ' pure-js-carousel-btn pure-js-carousel-btn-next';
-    scope.carouselBtnNext.type = 'button';
-    scope.carouselBtnNext.addEventListener('click', function() {
-      scope.goToNext();
-    });
-
-    for (i = 0; i < slidesCount; i++) {
-      scope.carouselSlides[i].className += ' pure-js-carousel-slide';
-      scope.carouselList.appendChild(scope.carouselSlides[i]);
-    }
-
-    if (scope.infinite === true) {
-      scope.carouselBtnPrev.disabled = true;
-      for (i = 0; i < slidesCount; i++) {
-        scope.carouselList.appendChild(scope.carouselSlides[i].cloneNode(true));
+  scope.destroy = function() {
+    if (scope.carouselState === 1) {
+      var i;
+      scope.carousel.className = scope.carousel.className.replace(' pure-js-carousel', '');
+      scope.carousel.removeChild(scope.carouselDotsList);
+      if (scope.config.btnNext) {
+        scope.carouselBtnNext.className = scope.carouselBtnNext.className.replace(' pure-js-carousel-btn pure-js-carousel-btn-next', '');
+      } else {
+        scope.carousel.removeChild(scope.carouselBtnNext);
       }
-      for (i = 0; i < slidesCount; i++) {
-        scope.carouselList.insertBefore(scope.carouselSlides[i].cloneNode(true), scope.carouselList.querySelector('.pure-js-carousel-slide')[i]);
+      if (scope.config.btnPrev) {
+        scope.carouselBtnPrev.className = scope.carouselBtnPrev.className.replace(' pure-js-carousel-btn pure-js-carousel-btn-prev', '');
+      } else {
+        scope.carousel.removeChild(scope.carouselBtnPrev);
       }
+      if (scope.infinite === true) {
+        for (i = 0; i < scope.carouselSlides.length; i++) {
+          scope.carouselList.removeChild(scope.carouselList.querySelector('.pure-js-carousel-slide')[0]);
+        }
+        for (i = 0; i < scope.carouselSlides.length; i++) {
+          scope.carouselList.removeChild(scope.carouselList.querySelector('.pure-js-carousel-slide')[scope.carouselSlides.length]);
+        }
+      }
+      for (i = 0; i < scope.carouselSlides.length; i++) {
+        scope.carouselSlides[i].className = scope.carouselSlides[i].className.replace(' pure-js-carousel-slide', '');
+        scope.carousel.insertBefore(scope.carouselSlides[i], scope.carouselList);
+      }
+      scope.carousel.removeChild(scope.carouselList);
+      setNewActiveIndex(0);
+
+      scope.carouselState = 0;
     }
   };
 
@@ -179,6 +214,10 @@ var PureJSCarousel = function(config) {
     for (i = 0; i < scope.carouselDotBtns.length; i++) {
       scope.carouselDotBtns[i].disabled = true;
     }
+    scope.carouselList.disabled = true;
+    scope.carouselList.removeEventListener('touchstart', carouselListTouchStart);
+    scope.carouselList.removeEventListener('touchmove', carouselListTouchMove);
+    scope.carouselList.removeEventListener('touchend', carouselListTouchEnd);
   };
 
   scope.enableControl = function() {
@@ -188,6 +227,19 @@ var PureJSCarousel = function(config) {
     for (i = 0; i < scope.carouselDotBtns.length; i++) {
       scope.carouselDotBtns[i].disabled = false;
     }
+    scope.carouselDotBtns[scope.activeIndex].disabled = true;
+    if (scope.infinite === false) {
+      if (scope.activeIndex === scope.maxIndex) {
+        scope.carouselBtnNext.disabled = true;
+      }
+      if (scope.activeIndex === 0) {
+        scope.carouselBtnPrev.disabled = true;
+      }
+    }
+    scope.carouselList.disabled = false;
+    scope.carouselList.addEventListener('touchstart', carouselListTouchStart);
+    scope.carouselList.addEventListener('touchmove', carouselListTouchMove);
+    scope.carouselList.addEventListener('touchend', carouselListTouchEnd);
   };
 
   scope.build();
@@ -195,11 +247,13 @@ var PureJSCarousel = function(config) {
     autoplayScroll();
   }
 
-  function carouselListTouchStart() {
+  function carouselListTouchStart(event) {
+    scope.startTouchX = event.targetTouches[0].pageX;
     scope.startTouchMargin = parseInt(scope.carouselList.style.marginLeft);
   }
 
-  function carouselListTouchMove() {
+  function carouselListTouchMove(event) {
+    scope.activeTouchX = event.targetTouches[0].pageX;
     scope.carouselList.style.marginLeft = scope.startTouchMargin + (scope.activeTouchX - scope.startTouchX) + 'px';
   }
 
