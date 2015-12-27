@@ -1,4 +1,4 @@
-# pureJSCarousel
+# PureJSCarousel
 Pure JavaScript carousel plugin (touch enabled). Demo: [http://ninjadev.pw/pure-js-carousel/](http://ninjadev.pw/pure-js-carousel/)
 > Tested on IE9+, Microsoft Edge, Chrome, Safari(5.1+), Firefox, Opera, Yandex browser, iOS 7, Android 4.4
 
