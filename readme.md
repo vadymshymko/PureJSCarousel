@@ -62,8 +62,6 @@ Enable carousel control: yourVariable.enableControl();
 
 Destroy: yourVariable.destroy();
 
-Rebuild after destroy: yourVariable.rebuild();
-
 Start autoplay: yourVariable.startAutoplay(autoplayDirection);
 
 Stop autoplay: yourVariable.stopAutoplay();
