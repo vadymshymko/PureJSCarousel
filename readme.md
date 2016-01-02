@@ -49,7 +49,7 @@ autoplayStartDelay | int | autoplayDelay
 autoplayDirection | string | 'next'
 infinite | boolean | false
 
-#### 4 Methods
+#### 3.2 Methods
 Go to next slide: yourVariable.goToNext();
 
 Go to prev slide: yourVariable.goToPrev();
