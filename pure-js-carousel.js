@@ -4,161 +4,161 @@
  * Author URI: http://ninjadev.pw/
  */
 
-var PureJSCarousel = function(config) {
+function PureJSCarousel(config) {
   var scope                     = this,
       dotsCount;
 
-      scope.autoplayScrollState = 0;
-      scope.carousel           = document.querySelector(config.carousel);
-      scope.carouselList       = document.createElement('div');
-      scope.carouselSlides     = scope.carousel.querySelectorAll(config.slide);
-      scope.carouselDotsList   = document.createElement('ul');
-      scope.carouselBtnNext    = scope.carousel.querySelector(config.btnNext) || false;
-      scope.carouselBtnPrev    = scope.carousel.querySelector(config.btnPrev) || false;
-      scope.slidesToShow       = Math.round(scope.carousel.offsetWidth / scope.carouselSlides[0].offsetWidth);
-      scope.oneByOne           = config.oneByOne || false;
-      scope.speed              = config.speed || 1000;
-      scope.delay              = config.delay || 0;
-      scope.effect             = config.effect || 'linear';
-      scope.autoplay           = config.autoplay || false;
-      scope.autoplayDelay      = config.autoplayDelay || 1000;
-      scope.autoplayStartDelay = config.autoplayStartDelay || scope.autoplayDelay;
-      scope.autoplayDirection  = config.autoplayDirection || 'next';
-      scope.infinite           = config.infinite || false;
-      scope.carouselDots       = [];
-      scope.carouselDotBtns    = [];
-      scope.activeIndex        = 0;
-      scope.maxIndex           = 0;
-      scope.destroy = function() {
-        var i;
-        scope.carousel.className = scope.carousel.className.replace(' pure-js-carousel', '');
-        scope.carousel.removeChild(scope.carouselDotsList);
+  scope.autoplayScrollState = 0;
+  scope.carousel           = document.querySelector(config.carousel);
+  scope.carouselList       = document.createElement('div');
+  scope.carouselSlides     = scope.carousel.querySelectorAll(config.slide);
+  scope.carouselDotsList   = document.createElement('ul');
+  scope.carouselBtnNext    = scope.carousel.querySelector(config.btnNext) || false;
+  scope.carouselBtnPrev    = scope.carousel.querySelector(config.btnPrev) || false;
+  scope.slidesToShow       = Math.round(scope.carousel.offsetWidth / scope.carouselSlides[0].offsetWidth);
+  scope.oneByOne           = config.oneByOne || false;
+  scope.speed              = config.speed || 1000;
+  scope.delay              = config.delay || 0;
+  scope.effect             = config.effect || 'linear';
+  scope.autoplay           = config.autoplay || false;
+  scope.autoplayDelay      = config.autoplayDelay || 1000;
+  scope.autoplayStartDelay = config.autoplayStartDelay || scope.autoplayDelay;
+  scope.autoplayDirection  = config.autoplayDirection || 'next';
+  scope.infinite           = config.infinite || false;
+  scope.carouselDots       = [];
+  scope.carouselDotBtns    = [];
+  scope.activeIndex        = 0;
+  scope.maxIndex           = 0;
+  scope.destroy = function() {
+    var i;
+    scope.carousel.className = scope.carousel.className.replace(' pure-js-carousel', '');
+    scope.carousel.removeChild(scope.carouselDotsList);
 
-        if (config.btnNext) {
-          scope.carouselBtnNext.className = scope.carouselBtnNext.className.replace(' pure-js-carousel-btn pure-js-carousel-btn-next', '');
-        } else {
-          scope.carousel.removeChild(scope.carouselBtnNext);
-        }
-        if (config.btnPrev) {
-          scope.carouselBtnPrev.className = scope.carouselBtnPrev.className.replace(' pure-js-carousel-btn pure-js-carousel-btn-prev', '');
-        } else {
-          scope.carousel.removeChild(scope.carouselBtnPrev);
-        }
+    if (config.btnNext) {
+      scope.carouselBtnNext.className = scope.carouselBtnNext.className.replace(' pure-js-carousel-btn pure-js-carousel-btn-next', '');
+    } else {
+      scope.carousel.removeChild(scope.carouselBtnNext);
+    }
+    if (config.btnPrev) {
+      scope.carouselBtnPrev.className = scope.carouselBtnPrev.className.replace(' pure-js-carousel-btn pure-js-carousel-btn-prev', '');
+    } else {
+      scope.carousel.removeChild(scope.carouselBtnPrev);
+    }
 
-        if (scope.infinite === true) {
-          for (i = 0; i < scope.carouselSlides.length; i++) {
-            scope.carouselList.removeChild(scope.carouselList.querySelector('.pure-js-carousel-slide')[0]);
-          }
-          for (i = 0; i < scope.carouselSlides.length; i++) {
-            scope.carouselList.removeChild(scope.carouselList.querySelector('.pure-js-carousel-slide')[scope.carouselSlides.length]);
-          }
-        }
-        for (i = 0; i < scope.carouselSlides.length; i++) {
-          scope.carouselSlides[i].className = scope.carouselSlides[i].className.replace(' pure-js-carousel-slide', '');
-          scope.carousel.insertBefore(scope.carouselSlides[i], scope.carouselList);
-        }
+    if (scope.infinite === true) {
+      for (i = 0; i < scope.carouselSlides.length; i++) {
+        scope.carouselList.removeChild(scope.carouselList.querySelector('.pure-js-carousel-slide')[0]);
+      }
+      for (i = 0; i < scope.carouselSlides.length; i++) {
+        scope.carouselList.removeChild(scope.carouselList.querySelector('.pure-js-carousel-slide')[scope.carouselSlides.length]);
+      }
+    }
+    for (i = 0; i < scope.carouselSlides.length; i++) {
+      scope.carouselSlides[i].className = scope.carouselSlides[i].className.replace(' pure-js-carousel-slide', '');
+      scope.carousel.insertBefore(scope.carouselSlides[i], scope.carouselList);
+    }
 
-        scope.carousel.removeChild(scope.carouselList);
-        setNewActiveIndex(0);
-        clearInterval(scope.autoplayInterval);
-        scope.autoplayScrollState = 0;
+    scope.carousel.removeChild(scope.carouselList);
+    setNewActiveIndex(0);
+    clearInterval(scope.autoplayInterval);
+    scope.autoplayScrollState = 0;
 
-        for (var property in scope) {
-          if (scope.hasOwnProperty(property)) {
-            delete scope[property];
-          }
-        }
-      };
-      scope.goTo = function(index) {
-        var direction          = index > scope.activeIndex ? 'next' : 'prev',
-            carouselListWidth  = scope.carouselList.offsetWidth / (scope.infinite === true ? 3 : 1),
-            carouselSlideWidth = scope.carouselSlides[0].offsetWidth,
-            carouselWidth      = scope.carousel.offsetWidth,
-            blockWidth         = scope.oneByOne === true ? carouselSlideWidth : carouselWidth,
-            minMargin          = (carouselWidth - (scope.carouselSlides.length * carouselSlideWidth)),
-            maxMargin          = 0,
-            currentMargin      = scope.infinite === true ? - carouselListWidth : Math.max(-blockWidth * scope.activeIndex, minMargin),
-            scrollWidth        = Math.abs(blockWidth * (scope.activeIndex - index)),
-            newMargin;
+    for (var property in scope) {
+      if (scope.hasOwnProperty(property)) {
+        delete scope[property];
+      }
+    }
+  };
+  scope.goTo = function(index) {
+    var direction          = index > scope.activeIndex ? 'next' : 'prev',
+        carouselListWidth  = scope.carouselList.offsetWidth / (scope.infinite === true ? 3 : 1),
+        carouselSlideWidth = scope.carouselSlides[0].offsetWidth,
+        carouselWidth      = scope.carousel.offsetWidth,
+        blockWidth         = scope.oneByOne === true ? carouselSlideWidth : carouselWidth,
+        minMargin          = (carouselWidth - (scope.carouselSlides.length * carouselSlideWidth)),
+        maxMargin          = 0,
+        currentMargin      = scope.infinite === true ? - carouselListWidth : Math.max(-blockWidth * scope.activeIndex, minMargin),
+        scrollWidth        = Math.abs(blockWidth * (scope.activeIndex - index)),
+        newMargin;
 
-        if (scope.oneByOne === false && ((direction === 'next' && index === scope.maxIndex) || (direction === 'prev' && scope.activeIndex === scope.maxIndex))) {
-          scrollWidth = scrollWidth + carouselListWidth - ((scope.maxIndex + 1) * blockWidth);
-        }
+    if (scope.oneByOne === false && ((direction === 'next' && index === scope.maxIndex) || (direction === 'prev' && scope.activeIndex === scope.maxIndex))) {
+      scrollWidth = scrollWidth + carouselListWidth - ((scope.maxIndex + 1) * blockWidth);
+    }
 
-        if (scope.infinite === true) {
-          newMargin = direction === 'next' ? currentMargin - scrollWidth : currentMargin + scrollWidth;
-        } else if (scope.infinite === false) {
-          newMargin = direction === 'next' ? Math.max(minMargin, currentMargin - scrollWidth) : Math.min(maxMargin, currentMargin + scrollWidth);
-        }
-        scroll(newMargin, index, direction, scrollWidth / carouselSlideWidth);
-      };
-      scope.goToPrev = function() {
-        var index;
-        if (scope.carouselBtnPrev.disabled === false) {
-          if (scope.infinite === true) {
-            index = scope.activeIndex - 1 < 0 ? scope.maxIndex : scope.activeIndex - 1;
-          } else if (scope.infinite === false) {
-            index = scope.activeIndex - 1;
-          }
-          directionBtnClick('prev', index);
-        }
-      };
-      scope.goToNext = function() {
-        var index;
-        if (scope.carouselBtnNext.disabled === false) {
-          if (scope.infinite === true) {
-            index = scope.activeIndex + 1 > scope.maxIndex ? 0 : scope.activeIndex + 1;
-          } else if (scope.infinite === false) {
-            index = scope.activeIndex + 1;
-          }
-          directionBtnClick('next', index);
-        }
-      };
-      scope.startAutoplay = function(direction) {
-        if (scope.autoplayScrollState === 0) {
-          scope.autoplayScrollState = 1;
-          scope.autoplayInterval = setInterval(function() {
-            direction === 'next' ? scope.goToNext() : scope.goToPrev();
-          }, scope.autoplayDelay);
-        }
-      };
-      scope.stopAutoplay = function() {
-        scope.autoplayScrollState = 0;
-        clearInterval(scope.autoplayInterval);
-      };
-      scope.disableControl = function() {
-        var i;
+    if (scope.infinite === true) {
+      newMargin = direction === 'next' ? currentMargin - scrollWidth : currentMargin + scrollWidth;
+    } else if (scope.infinite === false) {
+      newMargin = direction === 'next' ? Math.max(minMargin, currentMargin - scrollWidth) : Math.min(maxMargin, currentMargin + scrollWidth);
+    }
+    scroll(newMargin, index, direction, scrollWidth / carouselSlideWidth);
+  };
+  scope.goToPrev = function() {
+    var index;
+    if (scope.carouselBtnPrev.disabled === false) {
+      if (scope.infinite === true) {
+        index = scope.activeIndex - 1 < 0 ? scope.maxIndex : scope.activeIndex - 1;
+      } else if (scope.infinite === false) {
+        index = scope.activeIndex - 1;
+      }
+      directionBtnClick('prev', index);
+    }
+  };
+  scope.goToNext = function() {
+    var index;
+    if (scope.carouselBtnNext.disabled === false) {
+      if (scope.infinite === true) {
+        index = scope.activeIndex + 1 > scope.maxIndex ? 0 : scope.activeIndex + 1;
+      } else if (scope.infinite === false) {
+        index = scope.activeIndex + 1;
+      }
+      directionBtnClick('next', index);
+    }
+  };
+  scope.startAutoplay = function(direction) {
+    if (scope.autoplayScrollState === 0) {
+      scope.autoplayScrollState = 1;
+      scope.autoplayInterval = setInterval(function() {
+        direction === 'next' ? scope.goToNext() : scope.goToPrev();
+      }, scope.autoplayDelay);
+    }
+  };
+  scope.stopAutoplay = function() {
+    scope.autoplayScrollState = 0;
+    clearInterval(scope.autoplayInterval);
+  };
+  scope.disableControl = function() {
+    var i;
+    scope.carouselBtnNext.disabled = true;
+    scope.carouselBtnPrev.disabled = true;
+    for (i = 0; i < scope.carouselDotBtns.length; i++) {
+      scope.carouselDotBtns[i].disabled = true;
+    }
+    scope.carouselList.disabled = true;
+    scope.carouselList.removeEventListener('touchstart', carouselListTouchStart);
+    scope.carouselList.removeEventListener('touchmove', carouselListTouchMove);
+    scope.carouselList.removeEventListener('touchend', carouselListTouchEnd);
+  };
+  scope.enableControl = function() {
+    var i;
+    scope.carouselBtnNext.disabled = false;
+    scope.carouselBtnPrev.disabled = false;
+    for (i = 0; i < scope.carouselDotBtns.length; i++) {
+      scope.carouselDotBtns[i].disabled = false;
+    }
+    scope.carouselDotBtns[scope.activeIndex].disabled = true;
+    if (scope.infinite === false) {
+      if (scope.activeIndex === scope.maxIndex) {
         scope.carouselBtnNext.disabled = true;
+      }
+      if (scope.activeIndex === 0) {
         scope.carouselBtnPrev.disabled = true;
-        for (i = 0; i < scope.carouselDotBtns.length; i++) {
-          scope.carouselDotBtns[i].disabled = true;
-        }
-        scope.carouselList.disabled = true;
-        scope.carouselList.removeEventListener('touchstart', carouselListTouchStart);
-        scope.carouselList.removeEventListener('touchmove', carouselListTouchMove);
-        scope.carouselList.removeEventListener('touchend', carouselListTouchEnd);
-      };
-      scope.enableControl = function() {
-        var i;
-        scope.carouselBtnNext.disabled = false;
-        scope.carouselBtnPrev.disabled = false;
-        for (i = 0; i < scope.carouselDotBtns.length; i++) {
-          scope.carouselDotBtns[i].disabled = false;
-        }
-        scope.carouselDotBtns[scope.activeIndex].disabled = true;
-        if (scope.infinite === false) {
-          if (scope.activeIndex === scope.maxIndex) {
-            scope.carouselBtnNext.disabled = true;
-          }
-          if (scope.activeIndex === 0) {
-            scope.carouselBtnPrev.disabled = true;
-          }
-        }
-        scope.carouselList.disabled = false;
-        scope.carouselList.addEventListener('touchstart', carouselListTouchStart);
-        scope.carouselList.addEventListener('touchmove', carouselListTouchMove);
-        scope.carouselList.addEventListener('touchend', carouselListTouchEnd);
-      };
+      }
+    }
+    scope.carouselList.disabled = false;
+    scope.carouselList.addEventListener('touchstart', carouselListTouchStart);
+    scope.carouselList.addEventListener('touchmove', carouselListTouchMove);
+    scope.carouselList.addEventListener('touchend', carouselListTouchEnd);
+  };
 
   scope.carousel.className  += ' pure-js-carousel';
   scope.carousel.style.width = (scope.carouselSlides[0].offsetWidth * scope.slidesToShow) + 'px';
@@ -370,4 +370,4 @@ var PureJSCarousel = function(config) {
       }
     }
   }
-};
+}
