@@ -1,10 +1,15 @@
 # PureJSCarousel
 Pure JavaScript carousel plugin (touch enabled) 1.1. Demo: [http://ninjadev.pw/pure-js-carousel/](http://ninjadev.pw/pure-js-carousel/)
-> Tested on IE9+, Microsoft Edge, Chrome, Safari(5.1+), Firefox, Opera, Yandex browser, iOS 7, Android 4.4
+
+**Browser support**
+
+Chrome    | IE    | Firefox    | Safari    | Opera    | iOS    | Android
+:-------: | :---: | :--------: | :-------: | :------: | :----: | :--------:
++         | 9+    | +          | +         | +        | +      | +        
 
 ## Getting Started
 
-### 1. Include pureJSCarousel files
+### 1. Include PureJSCarousel files
 ```html
 <!-- stylesheet -->
 <link rel="stylesheet" href="path/to/pure-js-carousel.css">
@@ -25,25 +30,25 @@ Pure JavaScript carousel plugin (touch enabled) 1.1. Demo: [http://ninjadev.pw/p
   ...
 </div>
 ```
-### 3. Call the pureJSCarousel
+### 3. Call the PureJSCarousel
 ```html
 var yourVariable = new PureJSCarousel({
   carousel: '.your-selector-for-carousel',
   slide: '.your-selector-for-carousel-slide'
 });
 ```
-#### 3.1 Settings
+#### 3.1 Options
 Option | Type | Default
 ------ | ---- | -------
-carousel | string (CSS selector) |
-slide | string (CSS selector) |
+carousel | string (CSS selector) | n/a
+slide | string (CSS selector) | n/a
 btnNext | string (CSS selector) | document.createElement('button')
 btnPrev | string (CSS selector) | document.createElement('button')
 oneByOne | boolean | false
 speed | int | 1000
 delay | int | 0
 effect | string | 'linear'
-autoplay | boolean | false |
+autoplay | boolean | false
 autoplayDelay | int | 1000
 autoplayStartDelay | int | autoplayDelay
 autoplayDirection | string | 'next'
@@ -55,6 +60,8 @@ Go to next slide: yourVariable.goToNext();
 Go to prev slide: yourVariable.goToPrev();
 
 Go to slide: yourVariable.goTo(slideIndex);
+
+Update carousel: yourVariable.update();
 
 Disable carousel control: yourVariable.disableControl();
 
