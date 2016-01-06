@@ -5,7 +5,7 @@ Pure JavaScript carousel plugin (touch enabled && responsive) 1.1. Demo: [http:/
 
 Chrome    | IE    | Firefox    | Safari    | Opera    | iOS    | Android
 :-------: | :---: | :--------: | :-------: | :------: | :----: | :--------:
-Yes       | 9+    | Yes        | Yes       | Yes      | Yes    | Yes    
++         | 9+    | +          | +         | +        | 4+     | 4.3+    
 
 ## Getting Started
 
