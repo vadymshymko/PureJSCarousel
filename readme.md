@@ -1,5 +1,5 @@
 # PureJSCarousel
-Pure JavaScript carousel plugin (touch enabled && responsive) 1.1. Demo: [http://ninjadev.pw/pure-js-carousel/](http://ninjadev.pw/pure-js-carousel/)
+Pure JavaScript carousel plugin (touch enabled && responsive) 1.1. Demo: [http://ninjadev.pw/development/pure-js-carousel/](http://ninjadev.pw/development/pure-js-carousel/)
 
 **Browser support**
 
