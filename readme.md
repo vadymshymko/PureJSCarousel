@@ -1,20 +1,22 @@
 # PureJSCarousel
-Pure JavaScript carousel plugin (touch enabled) 1.1. Demo: [http://ninjadev.pw/pure-js-carousel/](http://ninjadev.pw/pure-js-carousel/)
+Pure JavaScript carousel plugin (touch enabled && responsive) 1.1. Demo: [http://ninjadev.pw/portfolio/purejscarousel/](http://ninjadev.pw/portfolio/purejscarousel/)
+=======
+Pure JavaScript carousel plugin (touch enabled) 1.1. Demo: [http://ninjadev.pw/purejscarousel/](http://ninjadev.pw/purejscarousel/)
 
 **Browser support**
 
 Chrome    | IE    | Firefox    | Safari    | Opera    | iOS    | Android
 :-------: | :---: | :--------: | :-------: | :------: | :----: | :--------:
-+         | 9+    | +          | +         | +        | +      | +        
++         | 9+    | +          | +         | +        | 4+     | 4.3+    
 
 ## Getting Started
 
 ### 1. Include PureJSCarousel files
 ```html
 <!-- stylesheet -->
-<link rel="stylesheet" href="path/to/pure-js-carousel.css">
+<link rel="stylesheet" href="path/to/purejscarousel.css">
 <!-- js -->
-<script src="path/to/pure-js-carousel.js"></script>
+<script src="path/to/purejscarousel.js"></script>
 ```
 
 ### 2. Set up your HTML
