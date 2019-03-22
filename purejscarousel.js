@@ -1,6 +1,5 @@
 /*
  * PureJSCarousel
- * version: 2.0.0
  * Author: Vadym Shymko
  * Author URI: https://vadymshymko.github.io
  */
