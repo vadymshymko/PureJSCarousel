@@ -1,4 +1,4 @@
-# PureJSCarousel (Deprecated. The new version will be soon)
+# PureJSCarousel
 Pure JavaScript carousel plugin (touch enabled && responsive) (v1.1)
 
 Demo: [https://vadymshymko.github.io/portfolio/purejscarousel/](https://vadymshymko.github.io/portfolio/purejscarousel/)
