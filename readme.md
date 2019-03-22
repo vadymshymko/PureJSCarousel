@@ -1,5 +1,5 @@
 # PureJSCarousel
-Pure JavaScript carousel plugin (touch enabled && responsive) (v1.1)
+Pure JavaScript carousel plugin (touch enabled && responsive)
 
 Demo: [https://vadymshymko.github.io/portfolio/purejscarousel/](https://vadymshymko.github.io/portfolio/purejscarousel/)
 
