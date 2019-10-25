@@ -3,6 +3,8 @@ Pure JavaScript carousel plugin (touch enabled && responsive)
 
 Demo: [https://vadymshymko.github.io/portfolio/purejscarousel/](https://vadymshymko.github.io/portfolio/purejscarousel/)
 
+### If you need this in project that use react, please see [react-simply-carousel](https://github.com/vadymshymko/react-simply-carousel)
+
 **Browser support**
 
 | Chrome    | IE    | Firefox    | Safari    | Opera    | iOS    | Android
