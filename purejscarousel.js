@@ -69,7 +69,7 @@
       });
       _.slidesContainer.addEventListener('touchend', function () {
         var direction  = parseInt(this.getAttribute('data-active-touch-x')) - parseInt(this.getAttribute('data-start-touch-x')) > 0 ? 'prev' : 'next',
-            blockWidth = _.oneByOne === true ? _.slidesContainer[0].offsetWidth : _.carousel.offsetWidth;
+            blockWidth = _.oneByOne === true ? _.slides[0].offsetWidth : _.carousel.offsetWidth;
         if (Math.abs(parseInt(this.getAttribute('data-active-touch-x')) - parseInt(this.getAttribute('data-start-touch-x'))) >= blockWidth / 2) {
           if (_.infinite === true) {
             direction === 'next' ? _.goToNextSlide() : _.goToPrevSlide();
