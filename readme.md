@@ -1,4 +1,7 @@
 # PureJSCarousel
+
+## :warning: PureJSCarousel is no longer maintained
+
 Pure JavaScript carousel plugin (responsive)
 
 Demo: [https://vadymshymko.github.io/portfolio/purejscarousel/](https://vadymshymko.github.io/portfolio/purejscarousel/)
