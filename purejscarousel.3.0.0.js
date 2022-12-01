@@ -558,6 +558,9 @@
       }
       this.carousel.removeChild(this.slidesContainer);
 
+      this.btnNext.replaceWith(this.btnNext.cloneNode(true));
+      this.btnPrev.replaceWith(this.btnPrev.cloneNode(true));
+
       this.minPos = null;
       this.slidesToShow = null;
       this.maxIndex = null;
